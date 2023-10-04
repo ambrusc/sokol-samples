@@ -66,11 +66,11 @@ void init(void) {
     sg_image_data img_data;
     uint32_t* ptr = state.pixels.mip0;
     bool even_odd = false;
-    for (int mip_index = 0; mip_index <= 8; mip_index++) {
+    for (int mip_index = 0; mip_index <= 7; mip_index++) {
         const int dim = 1<<(8-mip_index);
         img_data.subimage[0][mip_index].ptr = ptr;
-        img_data.subimage[0][mip_index].size = (size_t) (dim * dim * 4);
-        for (int y = 0; y < dim; y++) {
+        img_data.subimage[0][mip_index].size = (size_t) (dim / 2 * dim * 4);
+        for (int y = 0; y < dim / 2; y++) {
             for (int x = 0; x < dim; x++) {
                 *ptr++ = even_odd ? mip_colors[mip_index] : 0xFF000000;
                 even_odd = !even_odd;
@@ -80,8 +80,8 @@ void init(void) {
     }
     state.img = sg_make_image(&(sg_image_desc){
         .width = 256,
-        .height = 256,
-        .num_mipmaps = 9,
+        .height = 256 / 2,
+        .num_mipmaps = 8,
         .pixel_format = SG_PIXELFORMAT_RGBA8,
         .data = img_data
     });
